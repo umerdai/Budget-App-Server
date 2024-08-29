@@ -3,10 +3,13 @@ import Card from '../model/Cards.js';
 import Balance from '../model/Balance.js';
 import Transaction from '../model/Transaction.js';
 import Users from '../model/Users.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const connection = async () => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/Budget-app', {
+    await mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -89,6 +92,7 @@ const calculateBalance = async (userId) => {
 
     // Fetch all cards for the user
     const cards = await Card.find({ userId: userId });
+    console.log('Cards from Atlas:', cards);
     if (!cards || cards.length === 0) {
       throw new Error('No cards found for the user');
     }
